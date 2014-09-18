@@ -6,6 +6,7 @@
 #include <TGraph.h>
 #include <TApplication.h>
 #include <iostream>
+#include <sstream>
 
 #include <cstdlib>
 
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit and execute the next statements.
 
-  return EXIT_SUCCESS;
+//   return EXIT_SUCCESS;
 }
 
 void
@@ -61,23 +62,65 @@ usage()
 {
   char indent[] = "    ";
   cout << "This will generate and draw a correlation function calculated from Lednicky eqn.\n";
-  cout << "Usage:\n";
-  cout << indent << "-h, --help " << " Display this help" << '\n';
-  cout << indent << "--nogui " << " Do not display the GUI." << '\n';
+  cout << "Usage:\n\n";
+  cout << "  " << EXEC_NAME << " <OPTIONS>\n\n";
+  cout << "Options:\n";
+  cout << indent << "-h, --help "  << '\t'<< '\t' << '\t' << " Display this help" << '\n';
+  cout << indent << "--nogui "   << '\t'<< '\t'<< '\t' << " Do not display the GUI." << '\n';
+  cout << indent << "--radius <radius (fm)> " << '\t' << " Use as source radius." << '\n';
+  cout << indent << "--bin_count <integer> " << '\t' << " Number of bins in the correlation function plot." << '\n';
+  cout << indent << "--max_kstar <k* (GeV/C)> " << '\t' << " Upper limit of the correlation function's domain." << '\n';
   cout << std::endl;
 }
 
 void
 parse_args(const std::vector<std::string>& args)
 {
-  for (auto arg : args) {
+  for (auto arg_it = args.begin();
+        arg_it != args.end();
+        arg_it++) {
+    auto arg = *arg_it;
     if (arg == "--nogui") {
       cout << "Running No-Gui\n";
     }
     else if (arg == "-h" or arg == "--help") {
       usage();
       exit(EXIT_SUCCESS);
-    } else if (arg[0] == '-') {
+    }
+    else if (arg == "--radius") {
+      std::string radius_param(*(++arg_it));
+      try {
+        radius = std::stof(radius_param);
+      } catch (std::invalid_argument err_ia) {
+        cerr << "Unable to transform radius argument '" << radius_param << "' into a floating point number.\n";
+        exit(EXIT_FAILURE);
+      }
+    }
+    else if (arg == "--nonidentical") {
+      identical = false;
+    }
+    else if (arg == "--identical") {
+      identical = true;
+    }
+    else if (arg == "--bin_count") {
+      std::string bin_param(*(++arg_it));
+      try {
+        totalBins = std::stoi(bin_param);
+      } catch (std::invalid_argument err_ia) {
+        cerr << "Unable to transform bin_count argument '" << bin_param << "' into an integer.\n";
+        exit(EXIT_FAILURE);
+      }
+    }
+    else if (arg == "--max_kstar") {
+      std::string kstar_param(*(++arg_it));
+      try {
+        maxKstar = std::stof(kstar_param);
+      } catch (std::invalid_argument err_ia) {
+        cerr << "Unable to transform max_kstar argument '" << kstar_param << "' into a floating point number.\n";
+        exit(EXIT_FAILURE);
+      }
+    }
+    else if (arg[0] == '-') {
       cerr << "Unknown option '" << arg << "'\n";
       usage();
       exit(EXIT_FAILURE);

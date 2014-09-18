@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+lednicky
+*.dSYM
+
+!build/.keep
+build

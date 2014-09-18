@@ -10,7 +10,7 @@ ROOTLIBS = $(shell root-config --libs)
 
 CFLAGS = -Wall -g ${ROOTCFLAGS}
 
-#LEDNICKY_LIBS = lednicky.o faddeeva.o
+#LEDNICKY_LIBS = lednicky.o lednickyplot.o faddeeva.o
 
 LEDNICKY_LIBS = $(addprefix build/, lednicky.o faddeeva.o)
 

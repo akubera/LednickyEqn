@@ -4,15 +4,20 @@
 #include <TH1D.h>
 #include <TCanvas.h>
 #include <TGraph.h>
+#include <TImage.h>
 #include <TApplication.h>
 #include <iostream>
 #include <sstream>
+#include <TSystem.h>
 
 #include <cstdlib>
 
 using namespace std;
 
+bool SHOW_GUI = true;
+
 std::string EXEC_NAME;
+std::string OUTPUT;
 
 void usage();
 void parse_args(const std::vector<std::string>& args);
@@ -40,7 +45,7 @@ int main(int argc, char **argv)
   graphPrimaryCF->SetLineWidth(3);
 
   //Setup a canvas
-  TCanvas c1;
+  TCanvas *c = new TCanvas;
   //Draw a blank histogram with the correction dimensions on the canvas
   TH1D *templateHist = new TH1D("h1","",totalBins, 0., maxKstar);
   templateHist->SetAxisRange(0.8,1.1,"Y");
@@ -51,10 +56,39 @@ int main(int argc, char **argv)
   //Draw the correlation function on the canvas
   graphPrimaryCF->Draw("L");
 
-  theApp->Run(kTRUE); //Run the TApp to pause the code.
+  if (SHOW_GUI) {
+    theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit and execute the next statements.
+  }
 
-//   return EXIT_SUCCESS;
+gSystem->ProcessEvents();
+
+//   c1.Draw();
+
+   TCanvas *c2 = new TCanvas;
+   TH1F *h = new TH1F("gaus", "gaus", 100, -5, 5);
+   h->FillRandom("gaus", 10000);
+   h->Draw();
+
+   gSystem->ProcessEvents();
+
+   TImage *img = TImage::Create();
+
+   //img->FromPad(c, 10, 10, 300, 200);
+   img->FromPad(c2);
+
+   img->WriteImage("canvas.png");
+
+  if (OUTPUT.length()) {
+   TImage *img = TImage::Create();
+   img->FromPad(c);
+   img->WriteImage(OUTPUT.c_str());
+   delete img;
+  }
+
+  delete c;
+
+  return EXIT_SUCCESS;
 }
 
 void
@@ -81,7 +115,8 @@ parse_args(const std::vector<std::string>& args)
         arg_it++) {
     auto arg = *arg_it;
     if (arg == "--nogui") {
-      cout << "Running No-Gui\n";
+      cout << "[Lednicky] Running No-Gui\n";
+      SHOW_GUI = false;
     }
     else if (arg == "-h" or arg == "--help") {
       usage();
@@ -124,6 +159,9 @@ parse_args(const std::vector<std::string>& args)
       cerr << "Unknown option '" << arg << "'\n";
       usage();
       exit(EXIT_FAILURE);
+    }
+    else {
+      OUTPUT = arg;
     }
   }
 }

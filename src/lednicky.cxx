@@ -5,6 +5,8 @@
 // 2. This does not include any Coulomb interactions.
 // 3. This does not include any residual correlation effects.
 
+#include <algorithm>
+
 #include <TH1D.h>
 #include <TGraph.h>
 #include <TMath.h>
@@ -31,7 +33,7 @@ double f0re = -1.0; //Scattering length.  Can be positive or negative
 double f0im = 0.; //Should be zero for baryon-baryon. Nonzero for any baryon-antibaryon.  Not sure about baryon-meson.  For non-zero cases, is > 0 (I don't know of situations where this can be negative).
 double d0 = 3.0; //Effective range of interaction.  Should be >= 0
 bool identical = false;  //Are the two particles identical?  This turns on/off quantum interference
-double maxKstar = 1.0; //Highest k* value of histograms.  Minimum is 0
+double maxKstar = 1.5; //Highest k* value of histograms.  Minimum is 0
 int totalBins = 100; //How many bins will the histograms have?  maxKstar/totalBins will be the bin width.
 
 double GetLednickyF1(double z)
@@ -46,6 +48,13 @@ TGraph* GetLednickyEqn(bool identicalParticles)
   TF1 funf2("funf2","(1-exp(-[0]*[0]*x*x))/([0]*x)");
   funf2.SetParameter(0,2.*radius/hbarc);
   funf2.SetRange(0.0,2.); //why this range?
+
+  // create a vector
+  std::vector<double> kstar_v(totalBins);
+
+  float x_index = 0;
+  std::for_each(kstar_v.begin(), kstar_v.end(), [&x_index](double &n){ n = (x_index++ + 0.5) * maxKstar / totalBins;});
+
   double *kstar = new double[totalBins];
   // double ykre[100];
   // double ykim[100];

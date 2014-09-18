@@ -7,6 +7,7 @@ extern int totalBins; //How many bins will the histograms have?  maxKstar/totalB
 extern double normalization;  //Simple normalization factor
 extern double lamPrimary; // lambda parameter for primary pairs
 extern double maxKstar;
+extern double radius;
 
 TGraph* GetLednickyEqn(bool identicalParticles);
 

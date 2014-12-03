@@ -1,6 +1,7 @@
 
 #include "lednicky.h"
 
+#include <TString.h>
 #include <TH1D.h>
 #include <TCanvas.h>
 #include <TGraph.h>
@@ -8,6 +9,7 @@
 #include <TApplication.h>
 #include <iostream>
 #include <sstream>
+#include <stdexcept>
 #include <TSystem.h>
 
 #include <cstdlib>
@@ -18,6 +20,7 @@ bool SHOW_GUI = true;
 
 std::string EXEC_NAME;
 std::string OUTPUT;
+TString title;
 
 void usage();
 void parse_args(const std::vector<std::string>& args);
@@ -37,10 +40,11 @@ int main(int argc, char **argv)
 
 
   TGraph *graphPrimaryCF = GetLednickyEqn(identical);
-  for (int xBin=0; xBin<totalBins; xBin++) {
+  for (int xBin=0; xBin < totalBins; xBin++) {
     graphPrimaryCF->GetY()[xBin] = 1.0 + (graphPrimaryCF->GetY()[xBin]-1.0)*lamPrimary;
     graphPrimaryCF->GetY()[xBin] /= normalization; //scale so graphs look right
   }
+
   //Draw finished correlation function as a "connect-the-dots" line
   graphPrimaryCF->SetLineWidth(3);
 
@@ -52,6 +56,12 @@ int main(int argc, char **argv)
   templateHist->SetYTitle("C(#it{k}*)");
   templateHist->SetXTitle("#it{k}* (GeV/#it{c})");
   templateHist->Draw();
+  templateHist->SetStats(0);
+  std::stringstream title_stream;
+  title_stream << "Lednicky Prediction \\$("
+          << "f_0= " << f0re << "," 
+          << "R = " << radius<< ")\\$ ";
+  templateHist->SetTitle(title_stream.str().c_str());
 
   //Draw the correlation function on the canvas
   graphPrimaryCF->Draw("L");
@@ -114,7 +124,7 @@ parse_args(const std::vector<std::string>& args)
         arg_it != args.end();
         arg_it++) {
     auto arg = *arg_it;
-    if (arg == "--nogui") {
+    if (arg == "--nogui" || arg == "--no-gui") {
       cout << "[Lednicky] Running No-Gui\n";
       SHOW_GUI = false;
     }
@@ -154,6 +164,12 @@ parse_args(const std::vector<std::string>& args)
         cerr << "Unable to transform max_kstar argument '" << kstar_param << "' into a floating point number.\n";
         exit(EXIT_FAILURE);
       }
+    }
+    else if (arg == "--range") {
+      d0 = std::stod(*(++arg_it));
+    }
+    else if (arg == "--title") {
+      title =*(++arg_it);
     }
     else if (arg[0] == '-') {
       cerr << "Unknown option '" << arg << "'\n";

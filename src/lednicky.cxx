@@ -28,13 +28,13 @@ const double hbarc = 0.197327;
 //Manually set the fit parameters here.
 double lamPrimary = 0.2; // lambda parameter for primary pairs
 double radius = 3.0; // R_inv
-double normalization = 1.0;  //Simple normalization factor
-double f0re = -1.0; //Scattering length.  Can be positive or negative
-double f0im = 0.; //Should be zero for baryon-baryon. Nonzero for any baryon-antibaryon.  Not sure about baryon-meson.  For non-zero cases, is > 0 (I don't know of situations where this can be negative).
-double d0 = 3.0; //Effective range of interaction.  Should be >= 0
+double normalization = 1.0;  // Simple normalization factor
+double f0re = -0.71; //Scattering length.  Can be positive or negative
+double f0im = 0.0; //Should be zero for baryon-baryon. Nonzero for any baryon-antibaryon.  Not sure about baryon-meson.  For non-zero cases, is > 0 (I don't know of situations where this can be negative).
+double d0 = 2.0; //Effective range of interaction.  Should be >= 0
 bool identical = false;  //Are the two particles identical?  This turns on/off quantum interference
 double maxKstar = 1.5; //Highest k* value of histograms.  Minimum is 0
-int totalBins = 100; //How many bins will the histograms have?  maxKstar/totalBins will be the bin width.
+int totalBins = 1000; //How many bins will the histograms have?  maxKstar/totalBins will be the bin width.
 
 double GetLednickyF1(double z)
 {

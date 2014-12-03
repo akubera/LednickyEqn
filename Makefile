@@ -8,7 +8,7 @@ CXX = $(shell root-config --cxx)
 ROOTCFLAGS = $(shell root-config --cflags)
 ROOTLIBS = $(shell root-config --libs)
 
-CFLAGS = -Wall -g ${ROOTCFLAGS}
+CFLAGS = -Wall -g ${ROOTCFLAGS} -std=c++11
 
 #LEDNICKY_LIBS = lednicky.o lednickyplot.o faddeeva.o
 

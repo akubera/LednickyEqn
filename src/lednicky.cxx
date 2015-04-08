@@ -15,13 +15,13 @@
 #include <algorithm>
 #include <complex>
 #include <cmath>
+#include <iostream>
 
 #include <TH1D.h>
 #include <TGraph.h>
 #include <TMath.h>
 #include <TF1.h>
 #include <TH2D.h>
-#include <iostream>
 #include <TStyle.h>
 #include <TApplication.h>
 #include <TCanvas.h>
@@ -111,11 +111,9 @@ generate_lednicky_equation(const LednikcyEquation_s& eq)
 
     double &cf = Cf[i];
 
-
     const double denom = scattering_amplitude_denominator(x, eq.f0, eq.d0);
     const complex_t num = scattering_amplitude_numerator(x, eq.f0, eq.d0);
     const double amplitude = std::norm(num) / (denom * denom);
-
 
     cf = 0.5 * (amplitude/radius_squared)*(1. - eq.d0 / (2.0 * SQRT_PI * eq.radius));
     cf += 2*(num.real()/denom) / (SQRT_PI * eq.radius) * get_lednicky_f1(2.* x *radius/hbarc);
@@ -123,13 +121,11 @@ generate_lednicky_equation(const LednikcyEquation_s& eq)
     cf -= (num.imag()/denom) * f2.Eval(x)/eq.radius;
 
     if (eq.identical) {
-     cf *= 0.5; // identical spin 1/2 particles get suppressed by 1/2
-     cf -= 0.5 * exp(-4 * pow(x*radius/hbarc, 2));
+      cf *= 0.5; // identical spin 1/2 particles get suppressed by 1/2
+      cf -= 0.5 * exp(-4 * pow(x*radius/hbarc, 2));
     }
-
     cf += 1.0;
   }
-
 }
 
 double

@@ -6,6 +6,7 @@
 #pragma once
 
 #include <TGraph.h>
+#include <complex>
 
 typedef unsigned short ushort_t;
 typedef struct LednikcyEquation LednikcyEquation_s;
@@ -31,6 +32,9 @@ struct LednikcyEquation {
 
   /// Effective range of interaction (should be >= 0)
   double d0;
+
+  // The f0 parameter
+  std::complex<double> f0;
 
   /// Real part of f0
   double f0re;

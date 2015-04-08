@@ -60,6 +60,7 @@ int main(int argc, char **argv)
   std::stringstream title_stream;
   title_stream << "Lednicky Prediction \\$("
           << "f_0= " << f0re << "," 
+          << "d_0= " << d0 << "," 
           << "R = " << radius<< ")\\$ ";
   templateHist->SetTitle(title_stream.str().c_str());
 
@@ -165,7 +166,7 @@ parse_args(const std::vector<std::string>& args)
         exit(EXIT_FAILURE);
       }
     }
-    else if (arg == "--range") {
+    else if (arg == "--range" || arg == "--d0") {
       d0 = std::stod(*(++arg_it));
     }
     else if (arg == "--title") {

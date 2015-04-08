@@ -8,7 +8,10 @@ CXX = $(shell root-config --cxx)
 ROOTCFLAGS = $(shell root-config --cflags)
 ROOTLIBS = $(shell root-config --libs)
 
-CFLAGS = -Wall -g ${ROOTCFLAGS} -std=c++11
+GSL_FLAGS = $(shell pkg-config gsl --cflags)
+GSL_LIBS = $(shell pkg-config gsl --libs)
+
+CFLAGS = -Wall -g ${ROOTCFLAGS} ${GSL_FLAGS} -std=c++11
 
 #LEDNICKY_LIBS = lednicky.o lednickyplot.o faddeeva.o
 
@@ -24,7 +27,7 @@ build/%.o: src/%.cxx src/%.h
 	${CXX} ${CFLAGS} -c $< -o $@
 
 lednicky: src/main.cc ${LEDNICKY_LIBS} # src/lednicky.cxx src/lednicky.h
-	${CXX} ${CFLAGS} $< -o $@ ${ROOTLIBS} ${LEDNICKY_LIBS}
+	${CXX} ${CFLAGS} $< -o $@ ${ROOTLIBS} ${LEDNICKY_LIBS} ${GSL_LIBS}
 
 clean:
 	rm build/*

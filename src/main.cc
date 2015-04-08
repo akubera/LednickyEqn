@@ -59,8 +59,8 @@ int main(int argc, char **argv)
   templateHist->SetStats(0);
   std::stringstream title_stream;
   title_stream << "Lednicky Prediction \\$("
-          << "f_0= " << f0re << "," 
-          << "d_0= " << d0 << "," 
+          << "f_0= " << f0re << ","
+          << "d_0= " << d0 << ","
           << "R = " << radius<< ")\\$ ";
   templateHist->SetTitle(title_stream.str().c_str());
 
@@ -182,4 +182,3 @@ parse_args(const std::vector<std::string>& args)
     }
   }
 }
-

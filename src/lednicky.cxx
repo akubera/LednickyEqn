@@ -1,3 +1,8 @@
+///
+/// \file lednicky.cxx
+/// \breif Implementation of LednickyEquation
+///
+
 //Comments:
 // 1. Currently, the quantum interference terms are only set up for
 // spin 1/2 fermions.  For other spins, would need to make the lednicky eqn more
@@ -23,7 +28,7 @@
 using std::cout;
 using std::endl;
 
-const double hbarc = 0.197327;
+const double hbarc = 0.19732697;
 
 //Manually set the fit parameters here.
 double lamPrimary = 0.2; // lambda parameter for primary pairs
@@ -93,5 +98,3 @@ TGraph* GetLednickyEqn(bool identicalParticles)
   delete Cf;
   return cfGraph;
 }
-
-

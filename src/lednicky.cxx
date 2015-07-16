@@ -32,6 +32,7 @@ typedef std::complex<double> complex_t;
 
 using std::cout;
 using std::endl;
+using std::pow;
 
 const double hbarc = 0.19732697;
 
@@ -46,15 +47,15 @@ bool identical = false;  //Are the two particles identical?  This turns on/off q
 double maxKstar = 1.5; //Highest k* value of histograms.  Minimum is 0
 int totalBins = 1000; //How many bins will the histograms have?  maxKstar/totalBins will be the bin width.
 
-double get_lednicky_f1 (double z)
+double
+get_lednicky_f1 (double z)
 {
   return Faddeeva::Dawson(z) / z;
 }
 
-double scattering_amplitude_denominator(double x, const complex_t& f0, double d0)
+double
+scattering_amplitude_denominator(double x, const complex_t& f0, double d0)
 {
-  using std::pow;
-
   const double f0real = f0.real(),
                f0im = f0.imag(),
                hbarc_2 = hbarc*hbarc,
@@ -69,10 +70,9 @@ double scattering_amplitude_denominator(double x, const complex_t& f0, double d0
   return denominatorScatterAmp;
 }
 
-complex_t scattering_amplitude_numerator(double x, const complex_t& f0, double d0)
+complex_t
+scattering_amplitude_numerator(double x, const complex_t& f0, double d0)
 {
-  using std::pow;
-
   //numerator of real part of scattering amplitude
 
   double real_part = f0.real() + x*x*d0*std::norm(f0)/(2.*hbarc*hbarc),
@@ -83,10 +83,9 @@ complex_t scattering_amplitude_numerator(double x, const complex_t& f0, double d
 }
 
 
-void generate_lednicky_equation (const LednikcyEquation_s& eq)
+void
+generate_lednicky_equation(const LednikcyEquation_s& eq)
 {
-  using std::pow;
-
   TF1 f2("function_f2", "(1-exp(-[0]*[0]*x*x))/([0]*x)");
   f2.SetParameter(0, 2.0 * eq.radius / hbarc);
   f2.SetRange(0, eq.maxKstar);
@@ -129,29 +128,32 @@ void generate_lednicky_equation (const LednikcyEquation_s& eq)
     }
 
     cf += 1.0;
-
   }
 
 }
 
-double GetLednickyF1(double z)
+double
+GetLednickyF1(double z)
 {
   //
   double result = (1./z)*Faddeeva::Dawson(z);
   return result;
 }
 
-TGraph* GetLednickyEqn(bool identicalParticles)
+TGraph*
+GetLednickyEqn(bool identicalParticles)
 {
   TF1 funf2("funf2", "(1-exp(-[0]*[0]*x*x))/([0]*x)");
-  funf2.SetParameter(0,2.*radius/hbarc);
-  funf2.SetRange(0.0,2.); //why this range?
+  funf2.SetParameter(0, 2.0 * radius / hbarc);
+  funf2.SetRange(0.0, 2.0); //why this range?
 
   // create a vector with number of bins
   std::vector<double> kstar_v(totalBins);
 
   float x_index = 0;
-  std::for_each(kstar_v.begin(), kstar_v.end(), [&x_index](double &n){ n = (x_index++ + 0.5) * maxKstar / totalBins;});
+  std::for_each(kstar_v.begin(), kstar_v.end(), [&x_index] (double &n) {
+    n = (x_index++ + 0.5) * maxKstar / totalBins;
+  });
 
   double *kstar = new double[totalBins];
   // double ykre[100];

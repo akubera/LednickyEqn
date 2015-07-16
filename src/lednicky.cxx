@@ -147,7 +147,8 @@ GetLednickyEqn(bool identicalParticles)
   funf2.SetParameter(0, 2.0 * radius / hbarc);
   funf2.SetRange(0.0, 2.0); //why this range?
 
-  // create a vector with number of bins
+  // Create a vector with number of bins - this is the x axis of our
+  // correlation functoin
   std::vector<double> kstar_v(totalBins);
 
   float x_index = 0;
@@ -155,13 +156,20 @@ GetLednickyEqn(bool identicalParticles)
     n = (x_index++ + 0.5) * maxKstar / totalBins;
   });
 
+  // This is the y-axis of the correlation function
+  std::vector<double> Cf_v(totalBins);
+  std::for_each(kstar_v.begin(), kstar_v.end(), [&x_index] (double &x_val) {
+    x_val = (x_index++ + 0.5) * maxKstar / totalBins;
+  });
+
+
   double *kstar = new double[totalBins];
   // double ykre[100];
   // double ykim[100];
   double *Cf = new double[totalBins];
   // double rad = radius/hbarc;
   double denominatorScatterAmp, realScatterAmp, imaginaryScatterAmp, magnitudeScatterAmp;
-  for (int xBin=0; xBin<totalBins; xBin++) {
+  for (int xBin=0; xBin < totalBins; xBin++) {
     //Set the positions of the kstar bins
     kstar[xBin] = (xBin+0.5); // This shifts the center of the bin
     kstar[xBin] *= maxKstar;

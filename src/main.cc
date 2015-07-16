@@ -41,7 +41,9 @@ main(int argc, char **argv)
   const std::vector<std::string> argvv(argv, argv+argc);
   const ProgramOptions args = parse_args(argvv);
 
-  //Plot the primary-primary correlation function (graphPrimaryCF) as calculated via the Lednicky and Lyoboshits parameterization.  The graph is scaled by the relevant lambda parameters.
+  // Plot the primary-primary correlation function (graphPrimaryCF) as
+  // calculated via the Lednicky and Lyoboshits parameterization. The graph is
+  // scaled by the relevant lambda parameters.
 
   // The TApplication object allows the execution of the code to pause.
   // This allows the user a chance to look at and manipulate a TBrowser before
@@ -61,7 +63,7 @@ main(int argc, char **argv)
   TCanvas *c = new TCanvas;
   //Draw a blank histogram with the correction dimensions on the canvas
   TH1D *templateHist = new TH1D("h1","",totalBins, 0., maxKstar);
-  templateHist->SetAxisRange(0.8,1.1,"Y");
+  templateHist->SetAxisRange(0.8, 1.1, "Y");
   templateHist->SetYTitle("C(#it{k}*)");
   templateHist->SetXTitle("#it{k}* (GeV/#it{c})");
   templateHist->Draw();

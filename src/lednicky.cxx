@@ -84,7 +84,7 @@ scattering_amplitude_numerator(double x, const complex_t& f0, double d0)
 
 
 void
-generate_lednicky_equation(const LednikcyEquation_s& eq)
+generate_lednicky_equation(const LednickyEquation_s& eq)
 {
   TF1 f2("function_f2", "(1-exp(-[0]*[0]*x*x))/([0]*x)");
   f2.SetParameter(0, 2.0 * eq.radius / hbarc);

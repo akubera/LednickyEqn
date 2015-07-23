@@ -9,16 +9,16 @@
 #include <complex>
 
 typedef unsigned short ushort_t;
-typedef struct LednikcyEquation LednikcyEquation_s;
+typedef struct LednickyEquation LednickyEquation_s;
 
 /**
- * LednikcyEquation
+ * LednickyEquation
  * \brief Structure housing all parameters used by the Lednicky equations.
  *
  * This structure replaces the global vraiables used in the original code,
  * allowing multiple Lednicky equations to be analyzed at the same time.
  */
-struct LednikcyEquation {
+struct LednickyEquation {
   /// Are the two particles identical?  This turns on/off quantum interference
   bool identical;
 
